@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Profiles - Making C++ Safe Is Not Optional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #059669;
+  --green-dark: #047857;
+  --green-darker: #1a3a2a;
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --text-lighter: #9ca3af;
+  --bg: #ffffff;
+  --bg-alt: #f9fafb;
+  --border: #e5e7eb;
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--green); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--green-dark); }
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* ---- NAV ---- */
+nav {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.nav-brand-name {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.nav-brand-sub {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-light);
+  transition: color 0.2s;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--green); }
+
+/* ---- HERO ---- */
+.hero {
+  padding: 72px 0 64px;
+  border-bottom: 1px solid var(--border);
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 48px;
+  align-items: end;
+}
+.hero-text h1 {
+  font-family: var(--serif);
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.hero-text p {
+  font-size: 17px;
+  color: var(--text-light);
+  max-width: 420px;
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--green-dark); color: #fff; }
+.hero-photo { text-align: right; }
+.hero-photo img {
+  width: 280px;
+  height: 340px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 4px;
+}
+.hero-photo .caption {
+  text-align: center;
+  margin-top: 12px;
+}
+.hero-photo .caption strong {
+  display: block;
+  font-size: 15px;
+  color: var(--text);
+}
+.hero-photo .caption span {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+/* ---- PULLQUOTE ---- */
+.pullquote {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pullquote-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+.pullquote-marks {
+  font-family: var(--serif);
+  font-size: 80px;
+  color: var(--green);
+  line-height: 0.5;
+  display: block;
+  margin-bottom: 16px;
+}
+.pullquote blockquote {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.pullquote cite {
+  font-style: normal;
+  font-size: 15px;
+  color: var(--text-light);
+}
+
+/* ---- SECTION HEADINGS ---- */
+.section-title {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: var(--text);
+}
+
+/* ---- PAPERS TABLE ---- */
+.papers {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+.papers-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.papers-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  padding: 0 0 12px;
+  border-bottom: 2px solid var(--text);
+}
+.papers-table td {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  vertical-align: top;
+}
+.papers-table td:first-child {
+  font-weight: 600;
+  width: 100px;
+}
+.papers-table td:first-child a { color: var(--green); }
+.papers-table td:last-child {
+  color: var(--text-light);
+  width: 180px;
+}
+.papers-table tr:last-child td { border-bottom: none; }
+.view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+.view-all:hover { color: var(--green); }
+
+/* ---- PLAYGROUND ---- */
+.playground {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.playground .container {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.playground-info h2 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.playground-info p {
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.playground-info a {
+  font-size: 14px;
+  font-weight: 500;
+}
+.code-block {
+  background: #1e293b;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: #334155;
+  font-size: 12px;
+  color: #94a3b8;
+}
+.code-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  background: rgba(5,150,105,0.15);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.code-body {
+  padding: 16px;
+  overflow-x: auto;
+}
+.code-body pre {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #e2e8f0;
+  margin: 0;
+}
+.code-body .ln {
+  display: inline-block;
+  width: 24px;
+  color: #475569;
+  user-select: none;
+  text-align: right;
+  margin-right: 16px;
+}
+.code-body .kw { color: #c084fc; }
+.code-body .type { color: #38bdf8; }
+.code-body .fn { color: #67e8f9; }
+.code-body .inc { color: #fbbf24; }
+.code-body .cm { color: #64748b; }
+.code-body .num { color: #a5f3fc; }
+.code-body .op { color: #94a3b8; }
+
+/* ---- WHY NOT CONTRACTS ---- */
+.why-not {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+.why-not .container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.why-not h2 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--text);
+}
+.why-not-body p {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.why-not-body p:last-child { margin-bottom: 0; }
+
+/* ---- TESTIMONIALS ---- */
+.testimonials {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 32px;
+}
+.testimonial {
+  padding: 0;
+}
+.testimonial-quote-mark {
+  font-family: var(--serif);
+  font-size: 48px;
+  color: var(--green);
+  line-height: 0.8;
+  margin-bottom: 8px;
+}
+.testimonial blockquote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.testimonial cite {
+  font-style: normal;
+  display: block;
+}
+.testimonial cite strong {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.testimonial cite span {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text-light);
+  display: block;
+}
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--green-darker);
+  color: rgba(255,255,255,0.9);
+  padding: 40px 0;
+}
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-brand .nav-brand-name { color: #fff; }
+.footer-brand .nav-brand-sub { color: rgba(255,255,255,0.5); }
+.footer-nav { display: flex; gap: 28px; }
+.footer-nav a {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 500;
+}
+.footer-nav a:hover { color: #fff; }
+.footer-copy {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .hero .container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .hero-text h1 { font-size: 40px; }
+  .hero-photo { text-align: center; }
+  .hero-photo img { width: 220px; height: 270px; }
+  .playground .container {
+    grid-template-columns: 1fr;
+  }
+  .why-not .container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+  .pullquote blockquote { font-size: 20px; }
+  footer .container {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 14px; }
+  .papers-table td:last-child { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-brand">
+      <span class="nav-brand-name">C++ Profiles</span>
+      <span class="nav-brand-sub">By Bjarne Stroustrup</span>
+    </div>
+    <div class="nav-links">
+      <a href="#overview" class="active">Overview</a>
+      <a href="#papers">Papers</a>
+      <a href="#playground">Playground</a>
+      <a href="#testimonials">Testimonials</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="container">
+    <div class="hero-text">
+      <h1>Making C++ Safe Is Not Optional</h1>
+      <p>Bjarne Stroustrup's Profiles framework brings language-level safety to C++ - eliminating undefined behavior where it starts.</p>
+      <a href="#overview" class="btn">Overview &rarr;</a>
+    </div>
+    <div class="hero-photo">
+      <img src="bjarne.png" alt="Bjarne Stroustrup">
+      <div class="caption">
+        <strong>Bjarne Stroustrup</strong>
+        <span>Creator of C++</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULLQUOTE -->
+<section class="pullquote">
+  <div class="container">
+    <div class="pullquote-inner">
+      <span class="pullquote-marks">&ldquo;</span>
+      <blockquote>Safety is not a feature. It is a language responsibility. Profiles make that responsibility real.</blockquote>
+      <cite>&mdash; Bjarne Stroustrup</cite>
+    </div>
+  </div>
+</section>
+
+<!-- PAPERS -->
+<section class="papers" id="papers">
+  <div class="container">
+    <h2 class="section-title">The Papers</h2>
+    <table class="papers-table">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Title</th>
+          <th>Focus Area</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://wg21.link/P4317" target="_blank">P4317</a></td>
+          <td>A Profile for Runtime-Checkable Core-Language Undefined Behavior</td>
+          <td>Core UB Profile</td>
+        </tr>
+        <tr>
+          <td><a href="https://wg21.link/P4310" target="_blank">P4310</a></td>
+          <td>Core-Language Undefined Behavior and the Contract-Violation Response</td>
+          <td>Core Language</td>
+        </tr>
+        <tr>
+          <td><a href="https://wg21.link/P4297" target="_blank">P4297</a></td>
+          <td>Contracts and Profiles: Who Owns the Response?</td>
+          <td>Architecture</td>
+        </tr>
+        <tr>
+          <td><a href="https://wg21.link/P4306" target="_blank">P4306</a></td>
+          <td>Profiles vs Contracts: Configuration Ownership Comparison</td>
+          <td>Configuration</td>
+        </tr>
+        <tr>
+          <td><a href="https://wg21.link/P4318" target="_blank">P4318</a></td>
+          <td>The Cost of Standardizing Continuation Past Core-Language UB</td>
+          <td>Cost Analysis</td>
+        </tr>
+        <tr>
+          <td><a href="https://wg21.link/P4324" target="_blank">P4324</a></td>
+          <td>Minimal Contracts for C++</td>
+          <td>Minimal Design</td>
+        </tr>
+        <tr>
+          <td><a href="https://wg21.link/P3589" target="_blank">P3589</a></td>
+          <td>Profiles Framework: Wording for Profile-Specific Behavior</td>
+          <td>Standardization</td>
+        </tr>
+      </tbody>
+    </table>
+    <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/" target="_blank" class="view-all">View all papers &rarr;</a>
+  </div>
+</section>
+
+<!-- PLAYGROUND -->
+<section class="playground" id="playground">
+  <div class="container">
+    <div class="playground-info">
+      <h2>Try the Code</h2>
+      <p>Explore Profiles on Compiler Explorer.</p>
+      <p><a href="https://godbolt.org/z/cpp-profiles" target="_blank">godbolt.org/z/cpp-profiles</a></p>
+    </div>
+    <div class="code-block">
+      <div class="code-header">
+        <span>example.cpp</span>
+        <span class="code-tag">C++ (Profile)</span>
+      </div>
+      <div class="code-body">
+<pre><span class="ln">1</span><span class="inc">#include</span> <span class="inc">&lt;cstdint&gt;</span>
+<span class="ln">2</span><span class="kw">void</span> <span class="fn">f</span>(<span class="type">std::span</span>&lt;<span class="type">int</span>&gt; a) {
+<span class="ln">3</span>    <span class="type">int</span> x <span class="op">=</span> a[<span class="num">0</span>];       <span class="cm">// bounds-checked</span>
+<span class="ln">4</span>    a[<span class="num">1</span>] <span class="op">=</span> x <span class="op">+</span> <span class="num">1</span>;       <span class="cm">// overflow-checked</span>
+<span class="ln">5</span>}
+<span class="ln">6</span><span class="cm">// Try removing bounds checks and see what the Profile enforces.</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOT CONTRACTS -->
+<section class="why-not" id="why-not">
+  <div class="container">
+    <h2>Why Not Contracts?</h2>
+    <div class="why-not-body">
+      <p>Contracts are a valuable tool for documentation, validation, and optimization. But they are not a safety net. Contracts can be disabled, ignored, or forgotten. Safety must not depend on programmer discipline or build modes.</p>
+      <p>Profiles bake safety into the language rules. They close entire classes of undefined behavior by construction, not convention.</p>
+      <p>Contracts can describe intent. Profiles guarantee it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="section-title">What They Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="testimonial-quote-mark">&ldquo;</div>
+        <blockquote>Profiles are the most significant evolution in C++ safety since RAII.</blockquote>
+        <cite>
+          <strong>Herb Sutter</strong>
+          <span>C++ Program Manager, Microsoft</span>
+        </cite>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote-mark">&ldquo;</div>
+        <blockquote>Finally, a path to make C++ safer without breaking what works.</blockquote>
+        <cite>
+          <strong>Chandler Carruth</strong>
+          <span>Software Engineer, Google</span>
+        </cite>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-quote-mark">&ldquo;</div>
+        <blockquote>A principled approach that addresses the root causes of undefined behavior.</blockquote>
+        <cite>
+          <strong>Timur Doumler</strong>
+          <span>Founder, Isles of Wonder</span>
+        </cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">
+      <div class="nav-brand">
+        <span class="nav-brand-name">C++ Profiles</span>
+        <span class="nav-brand-sub">By Bjarne Stroustrup</span>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <a href="#overview">Overview</a>
+      <a href="#papers">Papers</a>
+      <a href="#playground">Playground</a>
+      <a href="#testimonials">Testimonials</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 Bjarne Stroustrup. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
