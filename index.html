@@ -306,6 +306,42 @@ nav .container {
   text-align: right;
   margin-right: 16px;
 }
+.playground-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+.playground-note {
+  font-size: 13px;
+  color: var(--text-lighter);
+  margin-top: 4px;
+}
+.playground-note code {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  font-size: 12px;
+}
+.example-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 32px;
+}
+.example-list li {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.example-list a {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+.example-list span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-light);
+  line-height: 1.45;
+}
 .code-body .kw { color: #c084fc; }
 .code-body .type { color: #38bdf8; }
 .code-body .fn { color: #67e8f9; }
@@ -421,6 +457,9 @@ footer .container {
   .hero-photo { text-align: center; }
   .hero-photo img { width: 220px; height: 270px; }
   .playground .container {
+    grid-template-columns: 1fr;
+  }
+  .example-list {
     grid-template-columns: 1fr;
   }
   .why-not .container {
@@ -568,22 +607,50 @@ footer .container {
   <div class="container">
     <div class="playground-info">
       <h2>Try the Code</h2>
-      <p>Explore Profiles on Compiler Explorer.</p>
-      <p><a href="https://godbolt.org/z/cpp-profiles" target="_blank">godbolt.org/z/cpp-profiles</a></p>
+      <p>Eight worked examples of the initialization profile, live on Compiler Explorer.</p>
+      <p class="playground-note">Profiles-enabled Clang &middot; <code>-std=c++23 -fprofiles</code></p>
     </div>
-    <div class="code-block">
-      <div class="code-header">
-        <span>example.cpp</span>
-        <span class="code-tag">C++ (Profile)</span>
+    <div class="playground-main">
+      <div class="code-block">
+        <div class="code-header">
+          <span>basics.cpp</span>
+          <span class="code-tag">excerpt</span>
+        </div>
+        <div class="code-body">
+<pre><span class="ln">1</span><span class="cm">// std::init: every object is initialized before it is read.</span>
+<span class="ln">2</span>[[<span class="type">profiles</span>::<span class="fn">enforce</span>(<span class="type">std</span>::<span class="type">init</span>)]];
+<span class="ln">3</span>
+<span class="ln">4</span><span class="kw">struct</span> <span class="type">Options</span> {
+<span class="ln">5</span>    <span class="kw">int</span> timeout_ms;
+<span class="ln">6</span>    <span class="kw">bool</span> verbose;
+<span class="ln">7</span>};
+<span class="ln">8</span>
+<span class="ln">9</span><span class="kw">int</span> <span class="fn">run</span>(<span class="kw">int</span> argc, <span class="kw">const</span> <span class="kw">char</span> <span class="op">**</span>argv) {
+<span class="ln">10</span>    <span class="type">Options</span> opts;   <span class="cm">// error: 'opts.timeout_ms' is indeterminate</span>
+<span class="ln">11</span>    <span class="kw">int</span> retries;    <span class="cm">// error: uninitialized</span>
+<span class="ln">12</span>
+<span class="ln">13</span>    <span class="kw">return</span> opts.timeout_ms <span class="op">*</span> retries;   <span class="cm">// error: read before init</span>
+<span class="ln">14</span>}</pre>
+        </div>
       </div>
-      <div class="code-body">
-<pre><span class="ln">1</span><span class="inc">#include</span> <span class="inc">&lt;cstdint&gt;</span>
-<span class="ln">2</span><span class="kw">void</span> <span class="fn">f</span>(<span class="type">std::span</span>&lt;<span class="type">int</span>&gt; a) {
-<span class="ln">3</span>    <span class="type">int</span> x <span class="op">=</span> a[<span class="num">0</span>];       <span class="cm">// bounds-checked</span>
-<span class="ln">4</span>    a[<span class="num">1</span>] <span class="op">=</span> x <span class="op">+</span> <span class="num">1</span>;       <span class="cm">// overflow-checked</span>
-<span class="ln">5</span>}
-<span class="ln">6</span><span class="cm">// Try removing bounds checks and see what the Profile enforces.</span></pre>
-      </div>
+      <ul class="example-list">
+        <li><a href="https://godbolt.org/z/n3TPjbqdY" target="_blank">Basics</a>
+          <span>Every object initialized before it is read</span></li>
+        <li><a href="https://godbolt.org/z/v796exxeh" target="_blank">Constructors</a>
+          <span>A user-provided constructor must initialize every member</span></li>
+        <li><a href="https://godbolt.org/z/ahTcd863v" target="_blank">Static initialization</a>
+          <span>The static initialization order fiasco, as a compile error</span></li>
+        <li><a href="https://godbolt.org/z/bW8q89Yce" target="_blank">[[uninit]]</a>
+          <span>Skip the zeroing without giving up the guarantee</span></li>
+        <li><a href="https://godbolt.org/z/7b6hfznxW" target="_blank">[[ref_to_uninit]]</a>
+          <span>Tell raw storage apart from live objects, at every call site</span></li>
+        <li><a href="https://godbolt.org/z/d6czYM7ad" target="_blank">[[now_init]] / [[now_uninit]]</a>
+          <span>The construct/destroy cycle, checked at compile time</span></li>
+        <li><a href="https://godbolt.org/z/K76qWGd44" target="_blank">Profile suppression</a>
+          <span>Per-rule opt-outs that carry a recorded justification</span></li>
+        <li><a href="https://godbolt.org/z/PjsMKfxYM" target="_blank">Container example</a>
+          <span>The annotation burden stays inside the container</span></li>
+      </ul>
     </div>
   </div>
 </section>
