@@ -336,6 +336,11 @@ nav .container {
   font-size: 14px;
   font-weight: 600;
 }
+.example-list a code {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  font-size: 13px;
+  letter-spacing: -0.2px;
+}
 .example-list span {
   display: block;
   font-size: 12.5px;
@@ -640,11 +645,11 @@ footer .container {
           <span>A user-provided constructor must initialize every member</span></li>
         <li><a href="https://godbolt.org/z/ahTcd863v" target="_blank">Static initialization</a>
           <span>The static initialization order fiasco, as a compile error</span></li>
-        <li><a href="https://godbolt.org/z/bW8q89Yce" target="_blank">[[uninit]]</a>
+        <li><a href="https://godbolt.org/z/bW8q89Yce" target="_blank"><code>[[uninit]]</code></a>
           <span>Skip the zeroing without giving up the guarantee</span></li>
-        <li><a href="https://godbolt.org/z/7b6hfznxW" target="_blank">[[ref_to_uninit]]</a>
+        <li><a href="https://godbolt.org/z/7b6hfznxW" target="_blank"><code>[[ref_to_uninit]]</code></a>
           <span>Tell raw storage apart from live objects, at every call site</span></li>
-        <li><a href="https://godbolt.org/z/d6czYM7ad" target="_blank">[[now_init]] / [[now_uninit]]</a>
+        <li><a href="https://godbolt.org/z/d6czYM7ad" target="_blank"><code>[[now_init]]</code> / <code>[[now_uninit]]</code></a>
           <span>The construct/destroy cycle, checked at compile time</span></li>
         <li><a href="https://godbolt.org/z/K76qWGd44" target="_blank">Profile suppression</a>
           <span>Per-rule opt-outs that carry a recorded justification</span></li>
