@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>C++ Profiles — language-level safety</title>
+<title>C++ Profiles: language-level safety</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@ table.papers td:first-child{font-weight:700;width:90px;}
 <section class="hero wrap" id="overview">
   <div class="intro">
     <h1>Making C++ Safe Is Not Optional</h1>
-    <p class="lead">The Profiles framework brings language-level safety to C++ — eliminating undefined behavior where it starts.</p>
+    <p class="lead">The Profiles framework brings language-level safety to C++: closing entire classes of undefined behavior at the source, and checking the rest.</p>
     <a class="btn" href="#overview">Overview →</a>
   </div>
   <div class="faces">
@@ -102,7 +102,7 @@ table.papers td:first-child{font-weight:700;width:90px;}
 <section class="quote wrap">
   <span class="mark">“</span>
   <blockquote>My personal focus is the type_safety profile that guarantees that every object is used (only) according to its definition. Type safety implies what people usually call memory safety and resource safety.</blockquote>
-  <cite>— <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p3038r0.pdf" target="_blank">“Concrete suggestions for initial Profiles” (P3038R0)</a></cite>
+  <cite>Bjarne Stroustrup, <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p3038r0.pdf" target="_blank">“Concrete suggestions for initial Profiles” (P3038R0)</a></cite>
 </section>
 <section class="sec wrap">
   <h2>Ten aspects of the mechanism</h2>
@@ -111,11 +111,11 @@ table.papers td:first-child{font-weight:700;width:90px;}
     <article class="cardx"><h3><span class="n">02</span>Initialization</h3><p>Uninitialized reads are among the cheapest defects to write and among the most expensive to diagnose. An initialization profile makes them ill-formed: every object is initialized before it is read, a user-provided constructor must initialize every member, and the static initialization order fiasco becomes a compile error. Where raw storage is required, the hole is named.</p></article>
     <article class="cardx"><h3><span class="n">03</span>Bounds, and default-deny</h3><p>A memory-safety profile starts from default-deny: an access is invalid unless the compiler can prove it belongs on the whitelist. When vector’s operator[] carries the bounds rule, every caller inherits the guarantee without annotating the call.</p></article>
     <article class="cardx"><h3><span class="n">04</span>Compile-time diagnosis of the common cases</h3><p>“Unprovable in the general case” is not the same as “unaddressable in the cases that dominate production.” Profiles target what the compiler can see. Those cases become ill-formed. The residue is enumerated and handled as runtime.</p></article>
-    <article class="cardx"><h3><span class="n">05</span>Incremental adoption on existing code</h3><p>Profiles are adopted per translation unit. There is no flag day and no signature rewrite. A project can enforce initialization in new files this week and leave a device driver on a recorded suppress until it is ready.</p></article>
+    <article class="cardx"><h3><span class="n">05</span>Incremental adoption on existing code</h3><p>Profiles are adopted per translation unit. There is no flag day, and the annotations that are required are local, verifiable, and do not change semantics. A project can enforce initialization in new files this week and leave a device driver on a recorded suppress until it is ready.</p></article>
     <article class="cardx"><h3><span class="n">06</span>Named suppression</h3><p>Safety that cannot be locally waived is safety that will be globally disabled. A suppress is named, scoped, and carries a recorded justification. The hole is greppable. Silence is not a dialect.</p></article>
-    <article class="cardx"><h3><span class="n">07</span>Runtime checking for remaining core-language UB</h3><p>For the runtime-checkable residue, a profile such as std::core_ub enumerates the cases, owns the check, and owns the response. The argued default is termination. Continuation past core-language undefined behavior is not the portable guarantee.</p></article>
+    <article class="cardx"><h3><span class="n">07</span>Runtime checking for remaining core-language UB</h3><p>For the runtime-checkable residue, a profile such as std::core_ub enumerates the cases, owns the check, and owns the response. The argued default is termination. Continuation past core-language undefined behavior is not the portable guarantee. The goal is not merely to avoid executing past undefined behavior but to eliminate it, which requires that the checks themselves cannot be optimized away by the undefined behavior they guard.</p></article>
     <article class="cardx"><h3><span class="n">08</span>A first-class framework, not a configuration preset</h3><p>A profile attests that these rules hold, or the program is ill-formed / does not proceed. That is a different object from a named bundle of switches over someone else’s machinery. A preset only selects from available settings; an attestor can reject the whole program.</p></article>
-    <article class="cardx"><h3><span class="n">09</span>Localizing the annotation burden</h3><p>Library authors do the local work once; applications consume it. Constructors that must initialize every member, bounds checks that live in operator[], lifetime transitions marked at the allocator boundary — these are the places a profile wants annotations.</p></article>
+    <article class="cardx"><h3><span class="n">09</span>Localizing the annotation burden</h3><p>Library authors do the local work once; applications consume it. Constructors that must initialize every member, bounds checks that live in operator[], lifetime transitions marked at the allocator boundary: these are the places a profile wants annotations.</p></article>
     <article class="cardx"><h3><span class="n">10</span>One meaning across implementations</h3><p>A profile is a portable language rule. The same source, under the same profile, is intended to be ill-formed or well-formed regardless of which vendor compiled it. If two implementations can disagree about whether a safety rule held, users have a vendor option, not a rule.</p></article>
   </div>
 </section>
