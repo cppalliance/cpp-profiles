@@ -65,6 +65,12 @@ table.papers td:first-child{font-weight:700;width:90px;}
 .says blockquote{font-family:var(--display);font-style:italic;font-size:14px;line-height:1.4;margin:6px 0 8px;}
 .says cite{font-size:12px;font-style:normal;opacity:.7;}
 .foot{display:flex;justify-content:space-between;align-items:center;padding:14px 0 18px;font-size:12px;opacity:.7;}
+.cardx .src{display:block;margin-top:3px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;opacity:.55;}
+.bib{list-style:none;font-size:12px;line-height:1.4;}
+.bib li{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:5px 0;border-bottom:1px solid var(--rule);}
+.bib .id{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11.5px;}
+.bib .au{display:block;opacity:.6;font-size:11px;}
+@media (max-width:800px){.bib li{grid-template-columns:1fr;gap:2px;}}
 @media (max-width:800px){
   .hero,.play,.why,.says,.grid2,.ex{grid-template-columns:1fr;}
   .faces{grid-template-columns:96px 96px;justify-content:start;}
@@ -172,16 +178,16 @@ table.papers td:first-child{font-weight:700;width:90px;}
   </div>
   <h2 style="margin:16px 0 8px;font-family:var(--display);font-size:22px;">Limits of the alternative</h2>
   <div class="grid2">
-    <article class="cardx"><h3><span class="n">01</span>It can be switched off</h3><p>An alternative that is stripped by a build mode is not a safety net. The person who ships the binary is often not the person who wrote the annotation. Discipline is not a mechanism.</p></article>
-    <article class="cardx"><h3><span class="n">02</span>A conforming implementation may do nothing</h3><p>The leading paper for the alternative states that existing implementations are already conforming with its wording transformation. A vendor may treat the new checks as assumptions and generate the same code as today.</p></article>
-    <article class="cardx"><h3><span class="n">03</span>Continuation after a language-undefined state</h3><p>Some designs invoke a handler and then continue. At the core-language-undefined class, continuation is execution in a state the language does not define. That is a protocol for living with undefined behavior, not closing it.</p></article>
-    <article class="cardx"><h3><span class="n">04</span>Coverage is a fraction of the census</h3><p>By the alternative’s own census, only 19 of 80 enumerated core-undefined-behavior cases are unconditionally locally runtime-checkable. A facility that cannot see most of the problem should not be the substrate every other story sits on.</p></article>
-    <article class="cardx"><h3><span class="n">05</span>The static half is declared impossible, then used to close the door</h3><p>The same census concludes that none of the 80 cases can be unconditionally diagnosed at compile time. “Unprovable in general” is not “unaddressable in the common cases.”</p></article>
-    <article class="cardx"><h3><span class="n">06</span>Ordinary code can change meaning</h3><p>One documented example flips the result of a well-formed program: noexcept of an expression that would become a core-language check is no longer the noexcept programmers have been writing for a decade.</p></article>
-    <article class="cardx"><h3><span class="n">07</span>The menu is not a guarantee</h3><p>Selecting among ignore, assume, observe, enforce, and throw is configuration. Whoever owns the final link can pick “assume” and the annotation becomes a comment the optimizer is allowed to believe.</p></article>
-    <article class="cardx"><h3><span class="n">08</span>Additive wording is not architecturally free</h3><p>Additive at the wording level is how a substrate gets locked. Once every core-language check is routed through a single program-wide handler, every later safety feature inherits that routing.</p></article>
+    <article class="cardx"><h3><span class="n">01</span>It can be switched off</h3><p>An alternative that is stripped by a build mode is not a safety net. The person who ships the binary is often not the person who wrote the annotation. Discipline is not a mechanism.<span class="src"><a href="https://wg21.link/P3100" target="_blank">P3100R8</a></span></p></article>
+    <article class="cardx"><h3><span class="n">02</span>A conforming implementation may do nothing</h3><p>The leading paper for the alternative states that existing implementations are already conforming with its wording transformation. A vendor may treat the new checks as assumptions and generate the same code as today.<span class="src"><a href="https://wg21.link/P3100" target="_blank">P3100R8</a></span></p></article>
+    <article class="cardx"><h3><span class="n">03</span>Continuation after a language-undefined state</h3><p>Some designs invoke a handler and then continue. At the core-language-undefined class, continuation is execution in a state the language does not define. That is a protocol for living with undefined behavior, not closing it.<span class="src"><a href="https://wg21.link/P4310" target="_blank">P4310R1</a></span></p></article>
+    <article class="cardx"><h3><span class="n">04</span>Coverage is a fraction of the census</h3><p>By the alternative’s own census, only 20 of 82 enumerated core-undefined-behavior cases are unconditionally locally runtime-checkable. A facility that cannot see most of the problem should not be the substrate every other story sits on.<span class="src"><a href="https://wg21.link/P3100" target="_blank">P3100R8</a></span></p></article>
+    <article class="cardx"><h3><span class="n">05</span>The static half is declared impossible, then used to close the door</h3><p>The same census concludes that none of the 82 cases can be unconditionally diagnosed at compile time. “Unprovable in general” is not “unaddressable in the common cases.”<span class="src"><a href="https://wg21.link/P3100" target="_blank">P3100R8</a></span></p></article>
+    <article class="cardx"><h3><span class="n">06</span>Ordinary code can change meaning</h3><p>One documented example flips the result of a well-formed program: noexcept of an expression that would become a core-language check is no longer the noexcept programmers have been writing for a decade.<span class="src"><a href="https://wg21.link/P4308" target="_blank">P4308R1</a></span></p></article>
+    <article class="cardx"><h3><span class="n">07</span>The menu is not a guarantee</h3><p>Selecting among ignore, observe, enforce, quick-enforce, and assume is configuration. Whoever owns the final link can pick “assume” and the annotation becomes a comment the optimizer is allowed to believe.<span class="src"><a href="https://wg21.link/P4318" target="_blank">P4318R1</a></span></p></article>
+    <article class="cardx"><h3><span class="n">08</span>Additive wording is not architecturally free</h3><p>Additive at the wording level is how a substrate gets locked. Once every core-language check is routed through a single program-wide handler, every later safety feature inherits that routing.<span class="src"><a href="https://wg21.link/P4297" target="_blank">P4297R1</a></span></p></article>
     <article class="cardx"><h3><span class="n">09</span>Predicates are a weak static-analysis surface</h3><p>Arbitrary predicates are attractive in slides and expensive in tools. Existing production analyzers already recover preconditions from ordinary assertions.</p></article>
-    <article class="cardx"><h3><span class="n">10</span>Cost is paid in the rest of the language</h3><p>A check that can throw can unwind, and unwinding is not free on every ABI. A check treated as an assumption can widen undefined behavior rather than close it. Cost studies leave the largest of these effects for future work.</p></article>
+    <article class="cardx"><h3><span class="n">10</span>Cost is paid in the rest of the language</h3><p>A check that can throw can unwind, and unwinding is not free on every ABI. A check treated as an assumption can widen undefined behavior rather than close it. Cost studies leave the largest of these effects for future work.<span class="src"><a href="https://wg21.link/P4318" target="_blank">P4318R1</a></span></p></article>
   </div>
 </section>
 <section class="sec wrap" id="testimonials">
@@ -197,9 +203,28 @@ table.papers td:first-child{font-weight:700;width:90px;}
     </div>
     <div>
       <blockquote>To address the contemporary challenge of memory safety concerns, we need some standard profiles related to type and memory safety, guaranteed to be available in all C++ implementations.</blockquote>
-      <cite><strong>Gabriel Dos Reis</strong><br>Microsoft · author, <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3589r2.pdf" target="_blank">P3589R2</a></cite>
+      <cite><strong>Gabriel Dos Reis</strong><br>Microsoft · author, <a href="https://wg21.link/P3589" target="_blank">P3589R3</a></cite>
     </div>
   </div>
+</section>
+<section class="sec wrap" id="bibliography">
+  <h2>Bibliography</h2>
+  <ol class="bib">
+      <li><span class="id"><a href="https://wg21.link/P3038" target="_blank">P3038R0</a></span><span>Concrete suggestions for initial Profiles<span class="au">Bjarne Stroustrup · 2023-12-16</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P3100" target="_blank">P3100R8</a></span><span>A framework for systematically addressing undefined behaviour in the C++ Standard<span class="au">Timur Doumler, Joshua Berne · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P3589" target="_blank">P3589R3</a></span><span>C++ Profiles: The Framework<span class="au">Gabriel Dos Reis · 2026-07-21</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P3970" target="_blank">P3970R0</a></span><span>Profiles and Safety: a call to action<span class="au">David Vandevoorde, Jeff Garland, Paul E. McKenney, Roger Orr, Bjarne Stroustrup, Michael Wong · 2026-02-23</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4222" target="_blank">P4222R2</a></span><span>An initialization profile<span class="au">Bjarne Stroustrup · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4238" target="_blank">P4238R0</a></span><span>Returning C++26 for the Evaluation It Skipped<span class="au">Vinnie Falco, Ville Voutilainen, José Daniel García Sánchez, John Spicer · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4296" target="_blank">P4296R0</a></span><span>Default-Deny + Provable-Whitelist Invalidation<span class="au">Guy Davidson, Sherry Ignatchenko, Dmytro Ivanchykhin, Marcos Bracco · 2026-07-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4297" target="_blank">P4297R1</a></span><span>Severing P3100’s Profiles Claim from Its Case-by-Case Review<span class="au">Vinnie Falco, Ville Voutilainen · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4306" target="_blank">P4306R1</a></span><span>Configuring Runtime Checking: Profiles and Implicit Contract Assertions<span class="au">Vinnie Falco, Ville Voutilainen · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4308" target="_blank">P4308R1</a></span><span>Eight Responses to a Throwing Implicit Contract Assertion<span class="au">Vinnie Falco, Ville Voutilainen · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4310" target="_blank">P4310R1</a></span><span>Hasta la Vista, Undefined Behavior: Why std::core_ub Should Terminate by Default<span class="au">Vinnie Falco, Ville Voutilainen · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4317" target="_blank">P4317R1</a></span><span>A Profile for Runtime-Checkable Core-Language Undefined Behavior: std::core_ub<span class="au">Vinnie Falco · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://wg21.link/P4318" target="_blank">P4318R1</a></span><span>Transient Benefit, Perpetual Cost: Implicit Core-Language Assertions<span class="au">Vinnie Falco · 2026-08-14</span></span></li>
+      <li><span class="id"><a href="https://herbsutter.com/2024/03/11/safety-in-context/" target="_blank">Blog</a></span><span>C++ safety, in context<span class="au">Herb Sutter · 2024-03-11</span></span></li>
+  </ol>
 </section>
 <footer class="foot wrap">
   <div>C++ Profiles</div>
