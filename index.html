@@ -53,6 +53,9 @@ table.papers{width:100%;border-collapse:collapse;font-size:13.5px;}
 table.papers th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;padding:0 0 8px;border-bottom:2px solid currentColor;}
 table.papers td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;}
 table.papers td:first-child{font-weight:700;width:90px;}
+table.papers tbody tr:last-child td{border-bottom:none;}
+.bib li:last-child{border-bottom:none;}
+.ex li:nth-last-child(-n+2){border-bottom:none;}
 .who{font-size:11px;opacity:.7;display:flex;align-items:center;gap:6px;margin-top:2px;}
 .who img{width:22px;height:22px;border-radius:50%;object-fit:cover;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;}
@@ -81,6 +84,8 @@ table.papers td:first-child{font-weight:700;width:90px;}
 @media (max-width:800px){.bib li{grid-template-columns:1fr;gap:2px;}}
 @media (max-width:800px){
   body::before{display:none;}
+  .ex li:nth-last-child(-n+2){border-bottom:1px solid var(--rule);}
+  .ex li:last-child{border-bottom:none;}
   .hero,.play,.why,.says,.grid2,.ex{grid-template-columns:1fr;}
   .faces{grid-template-columns:96px 96px;justify-content:start;}
 }
