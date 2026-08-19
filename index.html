@@ -96,7 +96,7 @@ table.papers td:first-child{font-weight:700;width:90px;}
 <section class="quote wrap">
   <span class="mark">“</span>
   <blockquote>My personal focus is the type_safety profile that guarantees that every object is used (only) according to its definition. Type safety implies what people usually call memory safety and resource safety.</blockquote>
-  <cite>— “Concrete suggestions for initial Profiles” (P3038R0)</cite>
+  <cite>— <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p3038r0.pdf" target="_blank">“Concrete suggestions for initial Profiles” (P3038R0)</a></cite>
 </section>
 <section class="sec wrap">
   <h2>Ten aspects of the mechanism</h2>
@@ -118,17 +118,17 @@ table.papers td:first-child{font-weight:700;width:90px;}
   <table class="papers">
     <thead><tr><th>Number</th><th>Title</th><th>Focus Area</th></tr></thead>
     <tbody>
-      <tr><td>P3589</td><td>C++ Profiles: The Framework<div class="who"><img src="photos/gaby.jpg" alt="">Gabriel Dos Reis</div></td><td>Framework</td></tr>
-      <tr><td>P3970</td><td>Profiles and Safety: a call to action</td><td>Direction</td></tr>
-      <tr><td>P4222</td><td>An initialization profile</td><td>Initialization</td></tr>
-      <tr><td>P4296</td><td>Default-Deny + Provable-Whitelist Invalidation</td><td>Memory Safety</td></tr>
-      <tr><td>P4317</td><td>A Profile for Runtime-Checkable Core-Language Undefined Behavior: std::core_ub</td><td>Core UB Profile</td></tr>
-      <tr><td>P4310</td><td>Hasta la Vista, Undefined Behavior: Why std::core_ub Should Terminate by Default</td><td>Core Language</td></tr>
-      <tr><td>P4297</td><td>Severing P3100’s Profiles Claim from Its Case-by-Case Review</td><td>Architecture</td></tr>
-      <tr><td>P4306</td><td>Configuring Runtime Checking: Profiles and Implicit Contract Assertions</td><td>Configuration</td></tr>
-      <tr><td>P4308</td><td>Eight Responses to a Throwing Implicit Contract Assertion</td><td>Contract Responses</td></tr>
-      <tr><td>P4318</td><td>Transient Benefit, Perpetual Cost: Implicit Core-Language Assertions</td><td>Cost Analysis</td></tr>
-      <tr><td>P4238</td><td>Returning C++26 for the Evaluation It Skipped</td><td>Process</td></tr>
+      <tr><td><a href="https://wg21.link/P3589" target="_blank">P3589</a></td><td>C++ Profiles: The Framework<div class="who"><img src="photos/gaby.jpg" alt="">Gabriel Dos Reis</div></td><td>Framework</td></tr>
+      <tr><td><a href="https://wg21.link/P3970" target="_blank">P3970</a></td><td>Profiles and Safety: a call to action</td><td>Direction</td></tr>
+      <tr><td><a href="https://wg21.link/P4222" target="_blank">P4222</a></td><td>An initialization profile</td><td>Initialization</td></tr>
+      <tr><td><a href="https://wg21.link/P4296" target="_blank">P4296</a></td><td>Default-Deny + Provable-Whitelist Invalidation</td><td>Memory Safety</td></tr>
+      <tr><td><a href="https://wg21.link/P4317" target="_blank">P4317</a></td><td>A Profile for Runtime-Checkable Core-Language Undefined Behavior: std::core_ub</td><td>Core UB Profile</td></tr>
+      <tr><td><a href="https://wg21.link/P4310" target="_blank">P4310</a></td><td>Hasta la Vista, Undefined Behavior: Why std::core_ub Should Terminate by Default</td><td>Core Language</td></tr>
+      <tr><td><a href="https://wg21.link/P4297" target="_blank">P4297</a></td><td>Severing P3100’s Profiles Claim from Its Case-by-Case Review</td><td>Architecture</td></tr>
+      <tr><td><a href="https://wg21.link/P4306" target="_blank">P4306</a></td><td>Configuring Runtime Checking: Profiles and Implicit Contract Assertions</td><td>Configuration</td></tr>
+      <tr><td><a href="https://wg21.link/P4308" target="_blank">P4308</a></td><td>Eight Responses to a Throwing Implicit Contract Assertion</td><td>Contract Responses</td></tr>
+      <tr><td><a href="https://wg21.link/P4318" target="_blank">P4318</a></td><td>Transient Benefit, Perpetual Cost: Implicit Core-Language Assertions</td><td>Cost Analysis</td></tr>
+      <tr><td><a href="https://wg21.link/P4238" target="_blank">P4238</a></td><td>Returning C++26 for the Evaluation It Skipped</td><td>Process</td></tr>
     </tbody>
   </table>
 </section>
@@ -149,14 +149,14 @@ table.papers td:first-child{font-weight:700;width:90px;}
     <span class="kw">return</span> opts.timeout_ms * retries;
 }</pre>
       <ul class="ex">
-        <li><strong>Basics</strong><span>Every object initialized before it is read</span></li>
-        <li><strong>Constructors</strong><span>A user-provided constructor must initialize every member</span></li>
-        <li><strong>Static initialization</strong><span>The static initialization order fiasco, as a compile error</span></li>
-        <li><strong><code>[[uninit]]</code></strong><span>Skip the zeroing without giving up the guarantee</span></li>
-        <li><strong><code>[[ref_to_uninit]]</code></strong><span>Tell raw storage apart from live objects, at every call site</span></li>
-        <li><strong><code>[[now_init]]</code> / <code>[[now_uninit]]</code></strong><span>The construct/destroy cycle, checked at compile time</span></li>
-        <li><strong>Profile suppression</strong><span>Per-rule opt-outs that carry a recorded justification</span></li>
-        <li><strong>Container example</strong><span>The annotation burden stays inside the container</span></li>
+        <li><strong><a href="https://godbolt.org/z/n3TPjbqdY" target="_blank">Basics</a></strong><span>Every object initialized before it is read</span></li>
+        <li><strong><a href="https://godbolt.org/z/v796exxeh" target="_blank">Constructors</a></strong><span>A user-provided constructor must initialize every member</span></li>
+        <li><strong><a href="https://godbolt.org/z/ahTcd863v" target="_blank">Static initialization</a></strong><span>The static initialization order fiasco, as a compile error</span></li>
+        <li><strong><a href="https://godbolt.org/z/bW8q89Yce" target="_blank"><code>[[uninit]]</code></a></strong><span>Skip the zeroing without giving up the guarantee</span></li>
+        <li><strong><a href="https://godbolt.org/z/7b6hfznxW" target="_blank"><code>[[ref_to_uninit]]</code></a></strong><span>Tell raw storage apart from live objects, at every call site</span></li>
+        <li><strong><a href="https://godbolt.org/z/d6czYM7ad" target="_blank"><code>[[now_init]]</code> / <code>[[now_uninit]]</code></a></strong><span>The construct/destroy cycle, checked at compile time</span></li>
+        <li><strong><a href="https://godbolt.org/z/K76qWGd44" target="_blank">Profile suppression</a></strong><span>Per-rule opt-outs that carry a recorded justification</span></li>
+        <li><strong><a href="https://godbolt.org/z/PjsMKfxYM" target="_blank">Container example</a></strong><span>The annotation burden stays inside the container</span></li>
       </ul>
     </div>
   </div>
@@ -189,15 +189,15 @@ table.papers td:first-child{font-weight:700;width:90px;}
   <div class="says">
     <div>
       <blockquote>I just want C++ to let me enforce our already-well-known safety rules and best practices by default, and make me opt out explicitly if that’s what I want.</blockquote>
-      <cite><strong>Herb Sutter</strong><br>Chair, ISO C++ Committee · “C++ safety, in context”</cite>
+      <cite><strong>Herb Sutter</strong><br>Chair, ISO C++ Committee · <a href="https://herbsutter.com/2024/03/11/safety-in-context/" target="_blank">“C++ safety, in context”</a></cite>
     </div>
     <div>
       <blockquote>SG23 and EWG have repeatedly (by massive votes) pointed to “Profiles” as the direction for addressing these urgent needs … The way to make progress is to build on the proposed Profiles framework.</blockquote>
-      <cite><strong>David Vandevoorde</strong><br>Edison Design Group · lead author, P3970R0</cite>
+      <cite><strong>David Vandevoorde</strong><br>Edison Design Group · lead author, <a href="https://wg21.link/P3970" target="_blank">P3970R0</a></cite>
     </div>
     <div>
       <blockquote>To address the contemporary challenge of memory safety concerns, we need some standard profiles related to type and memory safety, guaranteed to be available in all C++ implementations.</blockquote>
-      <cite><strong>Gabriel Dos Reis</strong><br>Microsoft · author, P3589R2</cite>
+      <cite><strong>Gabriel Dos Reis</strong><br>Microsoft · author, <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3589r2.pdf" target="_blank">P3589R2</a></cite>
     </div>
   </div>
 </section>
