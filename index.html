@@ -19,6 +19,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);}
+body{background-image:url("photos/watermark.png");background-repeat:no-repeat;background-attachment:fixed;background-position:right -110px bottom -30px;background-size:auto min(72vh,720px);}
 a{color:var(--accent);text-decoration:none;}
 .wrap{width:min(1080px,100%);margin:0 auto;padding:0 28px;}
 .top{display:flex;align-items:center;justify-content:space-between;height:52px;border-bottom:1px solid var(--rule);}
@@ -74,6 +75,7 @@ table.papers td:first-child{font-weight:700;width:90px;}
 .bib .au{display:block;opacity:.6;font-size:11px;}
 @media (max-width:800px){.bib li{grid-template-columns:1fr;gap:2px;}}
 @media (max-width:800px){
+  body{background-image:none;}
   .hero,.play,.why,.says,.grid2,.ex{grid-template-columns:1fr;}
   .faces{grid-template-columns:96px 96px;justify-content:start;}
 }
