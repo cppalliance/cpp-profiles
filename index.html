@@ -1,728 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C++ Profiles - Making C++ Safe Is Not Optional</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ Profiles — language-level safety</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --green: #059669;
-  --green-dark: #047857;
-  --green-darker: #1a3a2a;
-  --text: #1f2937;
-  --text-light: #6b7280;
-  --text-lighter: #9ca3af;
-  --bg: #ffffff;
-  --bg-alt: #f9fafb;
-  --border: #e5e7eb;
-  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--sans);
-  color: var(--text);
-  background: var(--bg);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-a { color: var(--green); text-decoration: none; transition: color 0.2s; }
-a:hover { color: var(--green-dark); }
-
-.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-
-/* ---- NAV ---- */
-nav {
-  position: sticky;
-  top: 0;
-  background: rgba(255,255,255,0.97);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border);
-  z-index: 100;
-}
-nav .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-}
-.nav-brand {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-.nav-brand-name {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--text);
-  letter-spacing: -0.3px;
-}
-.nav-brand-sub {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-light);
-}
-.nav-links { display: flex; gap: 32px; }
-.nav-links a {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-light);
-  transition: color 0.2s;
-}
-.nav-links a:hover,
-.nav-links a.active { color: var(--green); }
-
-/* ---- HERO ---- */
-.hero {
-  padding: 52px 0 44px;
-  border-bottom: 1px solid var(--border);
-}
-.hero .container {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 40px;
-  align-items: end;
-}
-.hero-text h1 {
-  font-family: var(--serif);
-  font-size: 56px;
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  color: var(--text);
-  margin-bottom: 18px;
-}
-.hero-text p {
-  font-size: 17px;
-  color: var(--text-light);
-  max-width: 420px;
-  margin-bottom: 24px;
-  line-height: 1.7;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--green);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 14px 28px;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-.btn:hover { background: var(--green-dark); color: #fff; }
-.hero-photo { text-align: right; }
-.hero-photo img {
-  width: 280px;
-  height: 340px;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 4px;
-}
-.hero-photo .caption {
-  text-align: center;
-  margin-top: 12px;
-}
-.hero-photo .caption strong {
-  display: block;
-  font-size: 15px;
-  color: var(--text);
-}
-.hero-photo .caption span {
-  font-size: 13px;
-  color: var(--text-light);
-}
-
-/* ---- PULLQUOTE ---- */
-.pullquote {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--border);
-}
-.pullquote-inner {
-  max-width: 720px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-}
-.pullquote-marks {
-  font-family: var(--serif);
-  font-size: 80px;
-  color: var(--green);
-  line-height: 0.5;
-  display: block;
-  margin-bottom: 12px;
-}
-.pullquote blockquote {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--text);
-  margin-bottom: 16px;
-}
-.pullquote cite {
-  font-style: normal;
-  font-size: 15px;
-  color: var(--text-light);
-}
-
-/* ---- SECTION HEADINGS ---- */
-.section-title {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 24px;
-  color: var(--text);
-}
-
-/* ---- PAPERS TABLE ---- */
-.papers {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--border);
-}
-.papers-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.papers-table th {
-  text-align: left;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-light);
-  padding: 0 0 12px;
-  border-bottom: 2px solid var(--text);
-}
-.papers-table td {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 15px;
-  vertical-align: top;
-}
-.papers-table td:first-child {
-  font-weight: 600;
-  width: 100px;
-}
-.papers-table td:first-child a { color: var(--green); }
-.papers-table td:last-child {
-  color: var(--text-light);
-  width: 180px;
-}
-.papers-table tr:last-child td { border-bottom: none; }
-.view-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 16px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-light);
-}
-.view-all:hover { color: var(--green); }
-
-/* ---- PLAYGROUND ---- */
-.playground {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-}
-.playground .container {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 32px;
-  align-items: start;
-}
-.playground-info h2 {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-.playground-info p {
-  font-size: 15px;
-  color: var(--text-light);
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-.playground-info a {
-  font-size: 14px;
-  font-weight: 500;
-}
-.code-block {
-  background: #1e293b;
-  border-radius: 6px;
-  overflow: hidden;
-}
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 16px;
-  background: #334155;
-  font-size: 12px;
-  color: #94a3b8;
-}
-.code-tag {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--green);
-  background: rgba(5,150,105,0.15);
-  padding: 2px 8px;
-  border-radius: 3px;
-}
-.code-body {
-  padding: 16px;
-  overflow-x: auto;
-}
-.code-body pre {
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
-  font-size: 13px;
-  line-height: 1.7;
-  color: #e2e8f0;
-  margin: 0;
-}
-.code-body .ln {
-  display: inline-block;
-  width: 24px;
-  color: #475569;
-  user-select: none;
-  text-align: right;
-  margin-right: 16px;
-}
-.playground-main {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-}
-.playground-note {
-  font-size: 13px;
-  color: var(--text-lighter);
-  margin-top: 4px;
-}
-.playground-note code {
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
-  font-size: 12px;
-}
-.example-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0 32px;
-}
-.example-list li {
-  padding: 7px 0;
-  border-bottom: 1px solid var(--border);
-}
-.example-list a {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-}
-.example-list a code {
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
-  font-size: 13px;
-  letter-spacing: -0.2px;
-}
-.example-list span {
-  display: block;
-  font-size: 12.5px;
-  color: var(--text-light);
-  line-height: 1.45;
-}
-.code-body .kw { color: #c084fc; }
-.code-body .type { color: #38bdf8; }
-.code-body .fn { color: #67e8f9; }
-.code-body .inc { color: #fbbf24; }
-.code-body .cm { color: #64748b; }
-.code-body .num { color: #a5f3fc; }
-.code-body .op { color: #94a3b8; }
-
-/* ---- WHY NOT CONTRACTS ---- */
-.why-not {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--border);
-}
-.why-not .container {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 36px;
-  align-items: start;
-}
-.why-not h2 {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 700;
-  font-style: italic;
-  color: var(--text);
-}
-.why-not-body p {
-  font-size: 16px;
-  color: var(--text);
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-.why-not-body p:last-child { margin-bottom: 0; }
-
-/* ---- TESTIMONIALS ---- */
-.testimonials {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--border);
-}
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-  margin-top: 24px;
-}
-.testimonial {
-  padding: 0;
-}
-.testimonial-quote-mark {
-  font-family: var(--serif);
-  font-size: 48px;
-  color: var(--green);
-  line-height: 0.8;
-  margin-bottom: 8px;
-}
-.testimonial blockquote {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-.testimonial cite {
-  font-style: normal;
-  display: block;
-}
-.testimonial cite strong {
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-}
-.testimonial cite span {
-  font-family: var(--sans);
-  font-size: 13px;
-  color: var(--text-light);
-  display: block;
-}
-
-/* ---- FOOTER ---- */
-footer {
-  background: var(--green-darker);
-  color: rgba(255,255,255,0.9);
-  padding: 30px 0;
-}
-footer .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.footer-brand .nav-brand-name { color: #fff; }
-.footer-brand .nav-brand-sub { color: rgba(255,255,255,0.5); }
-.footer-nav { display: flex; gap: 28px; }
-.footer-nav a {
-  color: rgba(255,255,255,0.7);
-  font-size: 14px;
-  font-weight: 500;
-}
-.footer-nav a:hover { color: #fff; }
-.footer-copy {
-  font-size: 13px;
-  color: rgba(255,255,255,0.4);
-}
-
-/* ---- RESPONSIVE ---- */
-@media (max-width: 768px) {
-  .hero .container {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  .hero-text h1 { font-size: 40px; }
-  .hero-photo { text-align: center; }
-  .hero-photo img { width: 220px; height: 270px; }
-  .playground .container {
-    grid-template-columns: 1fr;
-  }
-  .example-list {
-    grid-template-columns: 1fr;
-  }
-  .why-not .container {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .testimonials-grid {
-    grid-template-columns: 1fr;
-  }
-  .pullquote blockquote { font-size: 20px; }
-  footer .container {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-  }
-  .nav-links { gap: 20px; }
-  .nav-links a { font-size: 14px; }
-  .papers-table td:last-child { display: none; }
+:root{
+  --bg:#fbfaf6;
+  --ink:#222;
+  --accent:#0b6e4f;
+  --rule:#e4e0d4;
+  --display:"Source Serif 4",Georgia,serif;
+  --sans:"Source Sans 3",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);}
+a{color:var(--accent);text-decoration:none;}
+.wrap{width:min(1080px,100%);margin:0 auto;padding:0 28px;}
+.top{display:flex;align-items:center;justify-content:space-between;height:52px;border-bottom:1px solid var(--rule);}
+.brand{font-weight:800;font-size:16px;letter-spacing:-.02em;line-height:1.1;}
+.brand small{display:block;font-weight:600;font-size:9px;letter-spacing:.16em;text-transform:uppercase;opacity:.55;}
+.lnks{display:flex;gap:20px;font-size:13px;font-weight:500;}
+.lnks .is{box-shadow:inset 0 -2px 0 var(--accent);}
+.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:22px 0 16px;border-bottom:1px solid var(--rule);}
+.hero h1{font-family:var(--display);font-size:38px;line-height:1.06;font-weight:700;letter-spacing:-.02em;margin-bottom:10px;}
+.hero .lead{font-size:16px;line-height:1.45;max-width:48ch;opacity:.84;margin-bottom:14px;}
+.btn{display:inline-block;background:var(--accent);color:#fff !important;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 14px;}
+.faces{display:grid;grid-template-columns:96px 96px;gap:10px;}
+.faces figure{margin:0;}
+.faces img{width:100%;aspect-ratio:1;object-fit:cover;object-position:top center;display:block;background:#ddd;border-radius:50%;}
+.faces figcaption{padding-top:6px;}
+.faces strong{display:block;font-size:11px;}
+.faces span{display:block;font-size:10px;opacity:.65;line-height:1.3;}
+pre.code{background:#1e293b;color:#e2e8f0;font:12px/1.55 "IBM Plex Mono",ui-monospace,monospace;padding:14px 16px;overflow:auto;}
+pre.code .cm{color:#64748b;} pre.code .kw{color:#c084fc;} pre.code .ty{color:#38bdf8;} pre.code .fn{color:#67e8f9;}
+.quote{padding:14px 0;text-align:center;border-bottom:1px solid var(--rule);}
+.quote .mark{font-family:var(--display);font-size:56px;line-height:.35;color:var(--accent);display:block;margin-bottom:8px;}
+.quote blockquote{font-family:var(--display);font-style:italic;font-size:20px;line-height:1.35;max-width:42ch;margin:0 auto 8px;}
+.quote cite{font-size:12.5px;opacity:.7;font-style:normal;}
+.sec{padding:16px 0;border-bottom:1px solid var(--rule);}
+.sec h2{font-family:var(--display);font-size:26px;margin-bottom:10px;}
+table.papers{width:100%;border-collapse:collapse;font-size:13.5px;}
+table.papers th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;padding:0 0 8px;border-bottom:2px solid currentColor;}
+table.papers td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;}
+table.papers td:first-child{font-weight:700;width:90px;}
+.who{font-size:11px;opacity:.7;display:flex;align-items:center;gap:6px;margin-top:2px;}
+.who img{width:22px;height:22px;border-radius:50%;object-fit:cover;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;}
+.cardx{padding:8px 0;border-top:1px solid var(--rule);}
+.cardx h3{font-size:13px;font-weight:700;margin-bottom:3px;}
+.cardx .n{margin-right:6px;font-family:"IBM Plex Mono",monospace;color:var(--accent);opacity:1;}
+.cardx p{font-size:12.5px;line-height:1.42;opacity:.92;}
+.play{display:grid;grid-template-columns:220px 1fr;gap:22px;}
+.ex{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;list-style:none;margin-top:8px;}
+.ex li{padding:6px 0;border-bottom:1px solid var(--rule);font-size:13px;}
+.ex strong{display:block;} .ex span{display:block;font-size:12px;opacity:.65;}
+.why{display:grid;grid-template-columns:260px 1fr;gap:24px;}
+.why h2{font-style:italic;}
+.why .orig p{font-size:15px;line-height:1.5;margin-bottom:8px;}
+.says{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.says blockquote{font-family:var(--display);font-style:italic;font-size:14px;line-height:1.4;margin:6px 0 8px;}
+.says cite{font-size:12px;font-style:normal;opacity:.7;}
+.foot{display:flex;justify-content:space-between;align-items:center;padding:14px 0 18px;font-size:12px;opacity:.7;}
+@media (max-width:800px){
+  .hero,.play,.why,.says,.grid2,.ex{grid-template-columns:1fr;}
+  .faces{grid-template-columns:96px 96px;justify-content:start;}
 }
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <div class="container">
-    <div class="nav-brand">
-      <span class="nav-brand-name">C++ Profiles</span>
-      <span class="nav-brand-sub">By Bjarne Stroustrup</span>
-    </div>
-    <div class="nav-links">
-      <a href="#overview" class="active">Overview</a>
-      <a href="#papers">Papers</a>
-      <a href="#playground">Playground</a>
-      <a href="#testimonials">Testimonials</a>
-    </div>
-  </div>
+<nav class="top wrap">
+  <div class="brand">C++ Profiles<small>Language-level safety</small></div>
+  <div class="lnks"><a class="is" href="#overview">Overview</a><a href="#papers">Papers</a><a href="#playground">Playground</a><a href="#testimonials">Testimonials</a></div>
 </nav>
-
-<!-- HERO -->
-<section class="hero" id="overview">
-  <div class="container">
-    <div class="hero-text">
-      <h1>Making C++ Safe Is Not Optional</h1>
-      <p>Bjarne Stroustrup's Profiles framework brings language-level safety to C++ - eliminating undefined behavior where it starts.</p>
-      <a href="#overview" class="btn">Overview &rarr;</a>
-    </div>
-    <div class="hero-photo">
-      <img src="bjarne.png" alt="Bjarne Stroustrup">
-      <div class="caption">
-        <strong>Bjarne Stroustrup</strong>
-        <span>Creator of C++</span>
-      </div>
-    </div>
+<section class="hero wrap" id="overview">
+  <div class="intro">
+    <h1>Making C++ Safe Is Not Optional</h1>
+    <p class="lead">The Profiles framework brings language-level safety to C++ — eliminating undefined behavior where it starts.</p>
+    <a class="btn" href="#overview">Overview →</a>
+  </div>
+  <div class="faces">
+    <figure>
+      <img src="photos/gaby.jpg" alt="Gabriel Dos Reis">
+      <figcaption><strong>Gabriel Dos Reis</strong><span>P3589 · C++ Profiles: The Framework</span></figcaption>
+    </figure>
+    <figure>
+      <img src="photos/bjarne.png" alt="Bjarne Stroustrup">
+      <figcaption><strong>Bjarne Stroustrup</strong><span>P3038 · type_safety profile</span></figcaption>
+    </figure>
   </div>
 </section>
-
-<!-- PULLQUOTE -->
-<section class="pullquote">
-  <div class="container">
-    <div class="pullquote-inner">
-      <span class="pullquote-marks">&ldquo;</span>
-      <blockquote>My personal focus is the type_safety profile that guarantees that every object is used (only) according to its definition. Type safety implies what people usually call memory safety and resource safety.</blockquote>
-      <cite>&mdash; Bjarne Stroustrup, <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p3038r0.pdf" target="_blank">&ldquo;Concrete suggestions for initial Profiles&rdquo; (P3038R0)</a></cite>
-    </div>
+<section class="quote wrap">
+  <span class="mark">“</span>
+  <blockquote>My personal focus is the type_safety profile that guarantees that every object is used (only) according to its definition. Type safety implies what people usually call memory safety and resource safety.</blockquote>
+  <cite>— “Concrete suggestions for initial Profiles” (P3038R0)</cite>
+</section>
+<section class="sec wrap">
+  <h2>Ten aspects of the mechanism</h2>
+  <div class="grid2">
+    <article class="cardx"><h3><span class="n">01</span>Type safety</h3><p>A type-safety profile requires that every object is used only according to its definition. A pointer to T is not a pointer to a destroyed T, a never-initialized T, or a T recast into the wrong type. Memory safety and resource safety fall out of that rule. The compiler enforces it against the program as written.</p></article>
+    <article class="cardx"><h3><span class="n">02</span>Initialization</h3><p>Uninitialized reads are among the cheapest defects to write and among the most expensive to diagnose. An initialization profile makes them ill-formed: every object is initialized before it is read, a user-provided constructor must initialize every member, and the static initialization order fiasco becomes a compile error. Where raw storage is required, the hole is named.</p></article>
+    <article class="cardx"><h3><span class="n">03</span>Bounds, and default-deny</h3><p>A memory-safety profile starts from default-deny: an access is invalid unless the compiler can prove it belongs on the whitelist. When vector’s operator[] carries the bounds rule, every caller inherits the guarantee without annotating the call.</p></article>
+    <article class="cardx"><h3><span class="n">04</span>Compile-time diagnosis of the common cases</h3><p>“Unprovable in the general case” is not the same as “unaddressable in the cases that dominate production.” Profiles target what the compiler can see. Those cases become ill-formed. The residue is enumerated and handled as runtime.</p></article>
+    <article class="cardx"><h3><span class="n">05</span>Incremental adoption on existing code</h3><p>Profiles are adopted per translation unit. There is no flag day and no signature rewrite. A project can enforce initialization in new files this week and leave a device driver on a recorded suppress until it is ready.</p></article>
+    <article class="cardx"><h3><span class="n">06</span>Named suppression</h3><p>Safety that cannot be locally waived is safety that will be globally disabled. A suppress is named, scoped, and carries a recorded justification. The hole is greppable. Silence is not a dialect.</p></article>
+    <article class="cardx"><h3><span class="n">07</span>Runtime checking for remaining core-language UB</h3><p>For the runtime-checkable residue, a profile such as std::core_ub enumerates the cases, owns the check, and owns the response. The argued default is termination. Continuation past core-language undefined behavior is not the portable guarantee.</p></article>
+    <article class="cardx"><h3><span class="n">08</span>A first-class framework, not a configuration preset</h3><p>A profile attests that these rules hold, or the program is ill-formed / does not proceed. That is a different object from a named bundle of switches over someone else’s machinery. A preset only selects from available settings; an attestor can reject the whole program.</p></article>
+    <article class="cardx"><h3><span class="n">09</span>Localizing the annotation burden</h3><p>Library authors do the local work once; applications consume it. Constructors that must initialize every member, bounds checks that live in operator[], lifetime transitions marked at the allocator boundary — these are the places a profile wants annotations.</p></article>
+    <article class="cardx"><h3><span class="n">10</span>One meaning across implementations</h3><p>A profile is a portable language rule. The same source, under the same profile, is intended to be ill-formed or well-formed regardless of which vendor compiled it. If two implementations can disagree about whether a safety rule held, users have a vendor option, not a rule.</p></article>
   </div>
 </section>
-
-<!-- PAPERS -->
-<section class="papers" id="papers">
-  <div class="container">
-    <h2 class="section-title">The Papers</h2>
-    <table class="papers-table">
-      <thead>
-        <tr>
-          <th>Number</th>
-          <th>Title</th>
-          <th>Focus Area</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><a href="https://wg21.link/P3589" target="_blank">P3589</a></td>
-          <td>C++ Profiles: The Framework</td>
-          <td>Framework</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P3970" target="_blank">P3970</a></td>
-          <td>Profiles and Safety: a call to action</td>
-          <td>Direction</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4222" target="_blank">P4222</a></td>
-          <td>An initialization profile</td>
-          <td>Initialization</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4296" target="_blank">P4296</a></td>
-          <td>Default-Deny + Provable-Whitelist Invalidation</td>
-          <td>Memory Safety</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4317" target="_blank">P4317</a></td>
-          <td>A Profile for Runtime-Checkable Core-Language Undefined Behavior: std::core_ub</td>
-          <td>Core UB Profile</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4310" target="_blank">P4310</a></td>
-          <td>Hasta la Vista, Undefined Behavior: Why std::core_ub Should Terminate by Default</td>
-          <td>Core Language</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4297" target="_blank">P4297</a></td>
-          <td>Severing P3100&rsquo;s Profiles Claim from Its Case-by-Case Review</td>
-          <td>Architecture</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4306" target="_blank">P4306</a></td>
-          <td>Configuring Runtime Checking: Profiles and Implicit Contract Assertions</td>
-          <td>Configuration</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4308" target="_blank">P4308</a></td>
-          <td>Eight Responses to a Throwing Implicit Contract Assertion</td>
-          <td>Contract Responses</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4318" target="_blank">P4318</a></td>
-          <td>Transient Benefit, Perpetual Cost: Implicit Core-Language Assertions</td>
-          <td>Cost Analysis</td>
-        </tr>
-        <tr>
-          <td><a href="https://wg21.link/P4238" target="_blank">P4238</a></td>
-          <td>Returning C++26 for the Evaluation It Skipped</td>
-          <td>Process</td>
-        </tr>
-      </tbody>
-    </table>
-    <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/" target="_blank" class="view-all">View all papers &rarr;</a>
-  </div>
+<section class="sec wrap" id="papers">
+  <h2>The Papers</h2>
+  <table class="papers">
+    <thead><tr><th>Number</th><th>Title</th><th>Focus Area</th></tr></thead>
+    <tbody>
+      <tr><td>P3589</td><td>C++ Profiles: The Framework<div class="who"><img src="photos/gaby.jpg" alt="">Gabriel Dos Reis</div></td><td>Framework</td></tr>
+      <tr><td>P3970</td><td>Profiles and Safety: a call to action</td><td>Direction</td></tr>
+      <tr><td>P4222</td><td>An initialization profile</td><td>Initialization</td></tr>
+      <tr><td>P4296</td><td>Default-Deny + Provable-Whitelist Invalidation</td><td>Memory Safety</td></tr>
+      <tr><td>P4317</td><td>A Profile for Runtime-Checkable Core-Language Undefined Behavior: std::core_ub</td><td>Core UB Profile</td></tr>
+      <tr><td>P4310</td><td>Hasta la Vista, Undefined Behavior: Why std::core_ub Should Terminate by Default</td><td>Core Language</td></tr>
+      <tr><td>P4297</td><td>Severing P3100’s Profiles Claim from Its Case-by-Case Review</td><td>Architecture</td></tr>
+      <tr><td>P4306</td><td>Configuring Runtime Checking: Profiles and Implicit Contract Assertions</td><td>Configuration</td></tr>
+      <tr><td>P4308</td><td>Eight Responses to a Throwing Implicit Contract Assertion</td><td>Contract Responses</td></tr>
+      <tr><td>P4318</td><td>Transient Benefit, Perpetual Cost: Implicit Core-Language Assertions</td><td>Cost Analysis</td></tr>
+      <tr><td>P4238</td><td>Returning C++26 for the Evaluation It Skipped</td><td>Process</td></tr>
+    </tbody>
+  </table>
 </section>
-
-<!-- PLAYGROUND -->
-<section class="playground" id="playground">
-  <div class="container">
-    <div class="playground-info">
+<section class="sec wrap" id="playground">
+  <div class="play">
+    <div>
       <h2>Try the Code</h2>
-      <p>Eight worked examples of the initialization profile, live on Compiler Explorer.</p>
-      <p class="playground-note">Profiles-enabled Clang &middot; <code>-std=c++23 -fprofiles</code></p>
+      <p style="opacity:.75;font-size:14px;line-height:1.45;margin-bottom:8px;">Eight worked examples of the initialization profile, live on Compiler Explorer.</p>
+      <p style="font-size:12px;opacity:.55;">Profiles-enabled Clang · <code>-std=c++23 -fprofiles</code></p>
     </div>
-    <div class="playground-main">
-      <div class="code-block">
-        <div class="code-header">
-          <span>basics.cpp</span>
-          <span class="code-tag">excerpt</span>
-        </div>
-        <div class="code-body">
-<pre><span class="ln">1</span><span class="cm">// std::init: every object is initialized before it is read.</span>
-<span class="ln">2</span>[[<span class="type">profiles</span>::<span class="fn">enforce</span>(<span class="type">std</span>::<span class="type">init</span>)]];
-<span class="ln">3</span>
-<span class="ln">4</span><span class="kw">struct</span> <span class="type">Options</span> {
-<span class="ln">5</span>    <span class="kw">int</span> timeout_ms;
-<span class="ln">6</span>    <span class="kw">bool</span> verbose;
-<span class="ln">7</span>};
-<span class="ln">8</span>
-<span class="ln">9</span><span class="kw">int</span> <span class="fn">run</span>(<span class="kw">int</span> argc, <span class="kw">const</span> <span class="kw">char</span> <span class="op">**</span>argv) {
-<span class="ln">10</span>    <span class="type">Options</span> opts;   <span class="cm">// error: 'opts.timeout_ms' is indeterminate</span>
-<span class="ln">11</span>    <span class="kw">int</span> retries;    <span class="cm">// error: uninitialized</span>
-<span class="ln">12</span>
-<span class="ln">13</span>    <span class="kw">return</span> opts.timeout_ms <span class="op">*</span> retries;   <span class="cm">// error: read before init</span>
-<span class="ln">14</span>}</pre>
-        </div>
-      </div>
-      <ul class="example-list">
-        <li><a href="https://godbolt.org/z/n3TPjbqdY" target="_blank">Basics</a>
-          <span>Every object initialized before it is read</span></li>
-        <li><a href="https://godbolt.org/z/v796exxeh" target="_blank">Constructors</a>
-          <span>A user-provided constructor must initialize every member</span></li>
-        <li><a href="https://godbolt.org/z/ahTcd863v" target="_blank">Static initialization</a>
-          <span>The static initialization order fiasco, as a compile error</span></li>
-        <li><a href="https://godbolt.org/z/bW8q89Yce" target="_blank"><code>[[uninit]]</code></a>
-          <span>Skip the zeroing without giving up the guarantee</span></li>
-        <li><a href="https://godbolt.org/z/7b6hfznxW" target="_blank"><code>[[ref_to_uninit]]</code></a>
-          <span>Tell raw storage apart from live objects, at every call site</span></li>
-        <li><a href="https://godbolt.org/z/d6czYM7ad" target="_blank"><code>[[now_init]]</code> / <code>[[now_uninit]]</code></a>
-          <span>The construct/destroy cycle, checked at compile time</span></li>
-        <li><a href="https://godbolt.org/z/K76qWGd44" target="_blank">Profile suppression</a>
-          <span>Per-rule opt-outs that carry a recorded justification</span></li>
-        <li><a href="https://godbolt.org/z/PjsMKfxYM" target="_blank">Container example</a>
-          <span>The annotation burden stays inside the container</span></li>
+    <div>
+      <pre class="code"><span class="cm">// std::init: every object is initialized before it is read.</span>
+[[<span class="ty">profiles</span>::<span class="fn">enforce</span>(<span class="ty">std</span>::<span class="ty">init</span>)]];
+<span class="kw">struct</span> <span class="ty">Options</span> { <span class="kw">int</span> timeout_ms; <span class="kw">bool</span> verbose; };
+<span class="kw">int</span> <span class="fn">run</span>(<span class="kw">int</span> argc, <span class="kw">const</span> <span class="kw">char</span> **argv) {
+    <span class="ty">Options</span> opts;   <span class="cm">// error: indeterminate</span>
+    <span class="kw">int</span> retries;    <span class="cm">// error: uninitialized</span>
+    <span class="kw">return</span> opts.timeout_ms * retries;
+}</pre>
+      <ul class="ex">
+        <li><strong>Basics</strong><span>Every object initialized before it is read</span></li>
+        <li><strong>Constructors</strong><span>A user-provided constructor must initialize every member</span></li>
+        <li><strong>Static initialization</strong><span>The static initialization order fiasco, as a compile error</span></li>
+        <li><strong><code>[[uninit]]</code></strong><span>Skip the zeroing without giving up the guarantee</span></li>
+        <li><strong><code>[[ref_to_uninit]]</code></strong><span>Tell raw storage apart from live objects, at every call site</span></li>
+        <li><strong><code>[[now_init]]</code> / <code>[[now_uninit]]</code></strong><span>The construct/destroy cycle, checked at compile time</span></li>
+        <li><strong>Profile suppression</strong><span>Per-rule opt-outs that carry a recorded justification</span></li>
+        <li><strong>Container example</strong><span>The annotation burden stays inside the container</span></li>
       </ul>
     </div>
   </div>
 </section>
-
-<!-- WHY NOT CONTRACTS -->
-<section class="why-not" id="why-not">
-  <div class="container">
+<section class="sec wrap">
+  <div class="why">
     <h2>Why Not Contracts?</h2>
-    <div class="why-not-body">
+    <div class="orig">
       <p>Contracts are a valuable tool for documentation, validation, and optimization. But they are not a safety net. Contracts can be disabled, ignored, or forgotten. Safety must not depend on programmer discipline or build modes.</p>
       <p>Profiles bake safety into the language rules. They close entire classes of undefined behavior by construction, not convention.</p>
       <p>Contracts can describe intent. Profiles guarantee it.</p>
     </div>
   </div>
+  <h2 style="margin:16px 0 8px;font-family:var(--display);font-size:22px;">Limits of the alternative</h2>
+  <div class="grid2">
+    <article class="cardx"><h3><span class="n">01</span>It can be switched off</h3><p>An alternative that is stripped by a build mode is not a safety net. The person who ships the binary is often not the person who wrote the annotation. Discipline is not a mechanism.</p></article>
+    <article class="cardx"><h3><span class="n">02</span>A conforming implementation may do nothing</h3><p>The leading paper for the alternative states that existing implementations are already conforming with its wording transformation. A vendor may treat the new checks as assumptions and generate the same code as today.</p></article>
+    <article class="cardx"><h3><span class="n">03</span>Continuation after a language-undefined state</h3><p>Some designs invoke a handler and then continue. At the core-language-undefined class, continuation is execution in a state the language does not define. That is a protocol for living with undefined behavior, not closing it.</p></article>
+    <article class="cardx"><h3><span class="n">04</span>Coverage is a fraction of the census</h3><p>By the alternative’s own census, only 19 of 80 enumerated core-undefined-behavior cases are unconditionally locally runtime-checkable. A facility that cannot see most of the problem should not be the substrate every other story sits on.</p></article>
+    <article class="cardx"><h3><span class="n">05</span>The static half is declared impossible, then used to close the door</h3><p>The same census concludes that none of the 80 cases can be unconditionally diagnosed at compile time. “Unprovable in general” is not “unaddressable in the common cases.”</p></article>
+    <article class="cardx"><h3><span class="n">06</span>Ordinary code can change meaning</h3><p>One documented example flips the result of a well-formed program: noexcept of an expression that would become a core-language check is no longer the noexcept programmers have been writing for a decade.</p></article>
+    <article class="cardx"><h3><span class="n">07</span>The menu is not a guarantee</h3><p>Selecting among ignore, assume, observe, enforce, and throw is configuration. Whoever owns the final link can pick “assume” and the annotation becomes a comment the optimizer is allowed to believe.</p></article>
+    <article class="cardx"><h3><span class="n">08</span>Additive wording is not architecturally free</h3><p>Additive at the wording level is how a substrate gets locked. Once every core-language check is routed through a single program-wide handler, every later safety feature inherits that routing.</p></article>
+    <article class="cardx"><h3><span class="n">09</span>Predicates are a weak static-analysis surface</h3><p>Arbitrary predicates are attractive in slides and expensive in tools. Existing production analyzers already recover preconditions from ordinary assertions.</p></article>
+    <article class="cardx"><h3><span class="n">10</span>Cost is paid in the rest of the language</h3><p>A check that can throw can unwind, and unwinding is not free on every ABI. A check treated as an assumption can widen undefined behavior rather than close it. Cost studies leave the largest of these effects for future work.</p></article>
+  </div>
 </section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="container">
-    <h2 class="section-title">What They Say</h2>
-    <div class="testimonials-grid">
-      <div class="testimonial">
-        <div class="testimonial-quote-mark">&ldquo;</div>
-        <blockquote>I just want C++ to let me enforce our already-well-known safety rules and best practices by default, and make me opt out explicitly if that&rsquo;s what I want.</blockquote>
-        <cite>
-          <strong>Herb Sutter</strong>
-          <span>Chair, ISO C++ Committee &middot; <a href="https://herbsutter.com/2024/03/11/safety-in-context/" target="_blank">&ldquo;C++ safety, in context&rdquo;</a></span>
-        </cite>
-      </div>
-      <div class="testimonial">
-        <div class="testimonial-quote-mark">&ldquo;</div>
-        <blockquote>SG23 and EWG have repeatedly (by massive votes) pointed to &ldquo;Profiles&rdquo; as the direction for addressing these urgent needs &hellip; The way to make progress is to build on the proposed Profiles framework.</blockquote>
-        <cite>
-          <strong>David Vandevoorde</strong>
-          <span>Edison Design Group &middot; lead author, <a href="https://wg21.link/p3970" target="_blank">&ldquo;Profiles and Safety: a call to action&rdquo; (P3970R0)</a> &mdash; a six-author WG21 statement with J. Garland, P. E. McKenney, R. Orr, B. Stroustrup and M. Wong</span>
-        </cite>
-      </div>
-      <div class="testimonial">
-        <div class="testimonial-quote-mark">&ldquo;</div>
-        <blockquote>To address the contemporary challenge of memory safety concerns, we need some standard profiles related to type and memory safety, guaranteed to be available in all C++ implementations.</blockquote>
-        <cite>
-          <strong>Gabriel Dos Reis</strong>
-          <span>Microsoft &middot; author, <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3589r2.pdf" target="_blank">&ldquo;C++ Profiles: The Framework&rdquo; (P3589R2)</a></span>
-        </cite>
-      </div>
+<section class="sec wrap" id="testimonials">
+  <h2>What They Say</h2>
+  <div class="says">
+    <div>
+      <blockquote>I just want C++ to let me enforce our already-well-known safety rules and best practices by default, and make me opt out explicitly if that’s what I want.</blockquote>
+      <cite><strong>Herb Sutter</strong><br>Chair, ISO C++ Committee · “C++ safety, in context”</cite>
+    </div>
+    <div>
+      <blockquote>SG23 and EWG have repeatedly (by massive votes) pointed to “Profiles” as the direction for addressing these urgent needs … The way to make progress is to build on the proposed Profiles framework.</blockquote>
+      <cite><strong>David Vandevoorde</strong><br>Edison Design Group · lead author, P3970R0</cite>
+    </div>
+    <div>
+      <blockquote>To address the contemporary challenge of memory safety concerns, we need some standard profiles related to type and memory safety, guaranteed to be available in all C++ implementations.</blockquote>
+      <cite><strong>Gabriel Dos Reis</strong><br>Microsoft · author, P3589R2</cite>
     </div>
   </div>
 </section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-brand">
-      <div class="nav-brand">
-        <span class="nav-brand-name">C++ Profiles</span>
-        <span class="nav-brand-sub">By Bjarne Stroustrup</span>
-      </div>
-    </div>
-    <div class="footer-nav">
-      <a href="#overview">Overview</a>
-      <a href="#papers">Papers</a>
-      <a href="#playground">Playground</a>
-      <a href="#testimonials">Testimonials</a>
-    </div>
-    <div class="footer-copy">&copy; 2026 Bjarne Stroustrup. All rights reserved.</div>
-  </div>
+<footer class="foot wrap">
+  <div>C++ Profiles</div>
+  <div>Overview · Papers · Playground · Testimonials</div>
+  <div>WG21 · 2026</div>
 </footer>
-
 </body>
 </html>
